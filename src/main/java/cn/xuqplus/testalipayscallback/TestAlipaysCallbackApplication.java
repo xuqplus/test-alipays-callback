@@ -40,7 +40,7 @@ public class TestAlipaysCallbackApplication {
   @GetMapping("auth")
   public ModelAndView auth(ModelAndView mav, HttpServletRequest request) throws UnsupportedEncodingException {
     String remoteAddr = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length());
-    String callback = URLEncoder.encode("http://xjplus.xyz:8090/callback", "utf8");
+    String callback = URLEncoder.encode("http://106.12.80.76:8090/callback", "utf8");
     mav.setViewName(String.format("redirect:https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=%s&scope=auth_base&redirect_uri=%s",
             "2018080760954356",
             callback));
