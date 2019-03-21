@@ -1,0 +1,5 @@
+FROM maven:3.5
+
+COPY . /
+
+RUN mvn -DskipTests clean package
