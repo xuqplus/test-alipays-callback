@@ -23,10 +23,11 @@ public class TestAlipaysCallbackApplicationTests {
             "RSA2");
     AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
     request.setGrantType("authorization_code");
-    request.setCode("125e88c691fd410198371500d12bXX22");
+    request.setCode("4a19bf35b3e2428ca16c5e42e7a8NX22");
 //    request.setRefreshToken("201208134b203fe6c11548bcabd8da5bb087a83b"); // 不填也能请求成功
     AlipaySystemOauthTokenResponse response = alipayClient.execute(request);
     if (response.isSuccess()) {
+      String userId = response.getUserId();
       System.out.println("调用成功");
     } else {
       System.out.println("调用失败");
