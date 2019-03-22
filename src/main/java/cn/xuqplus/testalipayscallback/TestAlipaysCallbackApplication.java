@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +28,10 @@ public class TestAlipaysCallbackApplication {
     return "ok";
   }
 
-  @GetMapping("callback")
-  public String callback(String app_id, String scope, String auth_code) {
-    LOGGER.info("app_id={}, scope={}, auth_code={}, ", app_id, scope, auth_code);
-    return String.format("app_id=%s, scope=%s, auth_code=%s, ", app_id, scope, auth_code);
+  @GetMapping("callback/{no}")
+  public String callback(@PathVariable String no, String app_id, String scope, String auth_code) {
+    LOGGER.info("no={}, app_id={}, scope={}, auth_code={}, ", no, app_id, scope, auth_code);
+    return String.format("no=%s, app_id=%s, scope=%s, auth_code=%s, ", no, app_id, scope, auth_code);
   }
 
   @GetMapping("auth")
@@ -46,10 +43,10 @@ public class TestAlipaysCallbackApplication {
             callback));
     return mav;
   }
+
   @GetMapping("auth2")
-  public ModelAndView auth2(ModelAndView mav, HttpServletRequest request) throws UnsupportedEncodingException {
-    String remoteAddr = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length());
-    String callback = URLEncoder.encode("http://106.12.80.76:8090/callback", "utf8");
+  public ModelAndView auth2(ModelAndView mav, String no) throws UnsupportedEncodingException {
+    String callback = URLEncoder.encode("http://106.12.80.76:8090/callback/" + no, "utf8");
     mav.setViewName(String.format("redirect:https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=%s&redirect_uri=%s",
             "2018080760954356",
             callback));
