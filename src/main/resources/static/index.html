@@ -43,7 +43,10 @@
             alert('请用手机扫码..')
             return
         }
-        window.location.href = '/order?amount=' + $('#amount').val() + '&desc=' + $('#desc').val()
+        window.location.href = location.origin + '/order' +
+            '?amount=' + $('#amount').val() +
+            '&desc=' + $('#desc').val() +
+            '&browser=' + new Browser().browser
     }
 
     $(document).ready(function () {

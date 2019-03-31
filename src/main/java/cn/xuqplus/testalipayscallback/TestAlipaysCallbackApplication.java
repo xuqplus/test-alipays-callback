@@ -53,11 +53,7 @@ public class TestAlipaysCallbackApplication {
           "http://106.12.80.76:8090/callback/");
 
   private static final String getRemoteAddr(HttpServletRequest request) {
-    String XForwardedFor = request.getHeader("X-Forwarded-For");
-    if (StringUtils.isEmpty(XForwardedFor)) {
-      return request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length());
-    }
-    return XForwardedFor;
+    return request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length());
   }
 
   private static final int nextInt(int n) {
@@ -143,7 +139,7 @@ public class TestAlipaysCallbackApplication {
   }
 
   @GetMapping("order")
-  public Object order(String no, String amount, String desc, ModelAndView mav, HttpServletRequest request) throws Exception {
+  public Object order(String no, String amount, String desc, String browser, ModelAndView mav, HttpServletRequest request) throws Exception {
     LOGGER.info("order no={}, amount={}, desc={}", no, amount, desc);
     if (StringUtils.isEmpty(no) && !StringUtils.isEmpty(amount)) {
       /* 创建 */
@@ -155,9 +151,13 @@ public class TestAlipaysCallbackApplication {
       }
       Object[] merchant = merchants.get(merchants.keySet().toArray()[nextInt(merchants.keySet().size())]);
       orders.put(no, new Object[]{no, amount, desc, createAt, merchant, null, null, null});
-      mav.setViewName(String.format("redirect:https://render.alipay.com/p/s/i?scheme=%s",
-              URLEncoder.encode(String.format("alipays://platformapi/startapp?saId=10000007&qrcode=%s",
-                      URLEncoder.encode(String.format("%s/publicAppAuthorize?no=%s", getRemoteAddr(request), no), "utf-8")), "utf-8")));
+      if ("Alipay".equals(browser)) {
+        mav.setViewName(String.format("redirect:%s/publicAppAuthorize?no=%s", getRemoteAddr(request), no));
+      } else {
+        mav.setViewName(String.format("redirect:https://render.alipay.com/p/s/i?scheme=%s",
+                URLEncoder.encode(String.format("alipays://platformapi/startapp?saId=10000007&qrcode=%s",
+                        URLEncoder.encode(String.format("%s/publicAppAuthorize?no=%s", getRemoteAddr(request), no), "utf-8")), "utf-8")));
+      }
     }
     return mav;
   }
@@ -219,7 +219,7 @@ public class TestAlipaysCallbackApplication {
   }
 
   @GetMapping("notify")
-  public Object notify( String aliTradeNo) {
+  public Object notify(String aliTradeNo) {
     LOGGER.info("notify aliTradeNo={}", aliTradeNo);
     return new Res("0", "ok", null);
   }
