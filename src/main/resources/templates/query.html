@@ -39,6 +39,10 @@
             }
         })
     }, 999)
+
+    document.addEventListener("resume", function () {
+        AlipayJSBridge.call("exitApp")
+    });
 </script>
 <script th:if="${add}">
     $(document).ready(function () {
