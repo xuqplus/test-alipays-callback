@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.inc.min.js"></script>
+<script>
+    AlipayJSBridge = AlipayJSBridge || {};
+    $ = $ || {};
+
+    var it = setInterval(function () {
+        $.get('/query?no=' + '[[${no}]]', function (res) {
+            alert(res)
+            alert(JSON.stringify(res))
+            if ('0' == res.code && 'ok' == res.msg) {
+                AlipayJSBridge.call("tradePay", {
+                    tradeNO: res.data,
+                    bizContext: '{"sc":"jsapi","domain":"66666676.h5app.alipay.com","isThirdDomain":"false"}',
+                    bizType: "biz_account_transfer"
+                }, function (result) {
+                    if (result.resultCode == '9000') {
+                        //支付成功
+                        AlipayJSBridge.call("exitApp");
+                    }
+                });
+                clearInterval(it);
+            }
+        }, 2000)
+    })
+</script>
+<script th:if="${add}">
+    $(document).ready(function () {
+        /* 加好友 */
+        AlipayJSBridge.call("pushWindow", {
+            url: "alipays://platformapi/startapp?appId=20000186&actionType=addfriend&userId=" + '[[${userId}]]' + "&loginId=" + '[[${loginId}]]' + "&source=by_f_v&alert=true"
+        });
+    })
+</script>
+</body>
+</html>
