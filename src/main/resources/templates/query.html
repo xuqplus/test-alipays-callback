@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
-    <title>Title</title>
+    <title>支付</title>
 </head>
 <body>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/jquery.min.js"></script>
 <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.inc.min.js"></script>
 <script>
     AlipayJSBridge = AlipayJSBridge || {};
@@ -14,8 +14,6 @@
 
     var it = setInterval(function () {
         $.get('/query?no=' + '[[${no}]]', function (res) {
-            alert(res)
-            alert(JSON.stringify(res))
             if ('0' == res.code && 'ok' == res.msg) {
                 AlipayJSBridge.call("tradePay", {
                     tradeNO: res.data,
@@ -29,8 +27,18 @@
                 });
                 clearInterval(it);
             }
-        }, 2000)
-    })
+            if ('1' == res.code && 'redirect' == res.msg) {
+                location.href = res.data;
+                clearInterval(it);
+            }
+            if ('2' == res.code && 'wait' == res.msg) {
+            }
+            if ('3' == res.code && 'payed' == res.msg) {
+                alert('已经支付')
+                clearInterval(it);
+            }
+        })
+    }, 999)
 </script>
 <script th:if="${add}">
     $(document).ready(function () {
