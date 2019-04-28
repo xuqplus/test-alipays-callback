@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <link href="bootstrap.4.2.1.css" rel="stylesheet">
+    <title>支付</title>
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-2 col-md-4"></div>
+    <div class="col-8 col-md-4 text-center" style="margin:0.5em 0 1.5em;">
+        <div id="qr"></div>
+    </div>
+    <div class="col-2 col-md-4"></div>
+
+    <div class="col-12 text-center" style="margin:1em 0;">
+        <button class="btn btn-primary" style="width:65%;" onclick="go()">加好友</button>
+        <button class="btn btn-primary" style="width:65%;" onclick="toast()">toast</button>
+    </div>
+</div>
+<script src="jquery.min.js"></script>
+<script src="bootstrap.4.2.1.js"></script>
+<script src="qrcode.js"></script>
+<script src="Browser.js"></script>
+<script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.inc.min.js"></script>
+<script>
+    function go() {
+        var loginId = "340824a05nw.cdb@sina.cn"
+        var userId = "2088012758570434"
+
+        // window.location.href = "alipays://platformapi/startapp" +
+        //     "?appId=20000186" +
+        //     "&actionType=addfriend" +
+        //     "&userId=" + userId +
+        //     "&loginId=" + loginId +
+        //     "&source=by_f_v" +
+        //     "&alert=false";
+
+        // setInterval(function () {
+        //     AlipayJSBridge.call('toast', {
+        //         content: ' ',
+        //         type: '',
+        //         duration: 1000
+        //     })
+        //     AlipayJSBridge.call('showLoading', {
+        //         text: '订单生成中..'
+        //     })
+        // }, 20)
+        AlipayJSBridge.call("pushWindow", {
+            url: "alipays://platformapi/startapp?appId=20000186&actionType=addfriend&userId=" + userId + "&loginId=" + loginId + "&source=by_f_v&alert=false",
+            param: {
+                showLoading: false,
+                animationType: '',
+                showProgress:''
+            }
+        });
+    }
+
+    function toast() {
+        AlipayJSBridge.call('showLoading', {
+            text: '菜徐坤加载中..'
+        })
+        // AlipayJSBridge.call('alert',{
+        //     message:'aaa'
+        // })
+
+        // AlipayJSBridge.call('toast', {
+        //     content: 'fsafdsafdsafds',
+        //     type: 'exception',
+        //     duration: 1000
+        // })
+    }
+
+    $(document).ready(function () {
+        AlipayJSBridge.call('hideLoading');
+
+        new QRCode(document.getElementById("qr"), window.location.href);
+    })
+</script>
+</body>
+</html>
