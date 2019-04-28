@@ -12,5 +12,13 @@ public class ATestControllerTest {
   @Test
   public void bb() {
     // test
+	// 3
+	// 2
+	// 1
+  }
+
+  @Test
+  public void cc() {
+    // test
   }
 }
